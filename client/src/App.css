@@ -1,0 +1,102 @@
+/* Additional App-specific styles */
+.App {
+  min-height: 100vh;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5a6fd8;
+}
+
+/* Focus styles for accessibility */
+button:focus,
+input:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Animation for photo cards */
+.photo-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stagger animation for multiple photos */
+.photos-grid .photo-card:nth-child(1) { animation-delay: 0.1s; }
+.photos-grid .photo-card:nth-child(2) { animation-delay: 0.2s; }
+.photos-grid .photo-card:nth-child(3) { animation-delay: 0.3s; }
+.photos-grid .photo-card:nth-child(4) { animation-delay: 0.4s; }
+.photos-grid .photo-card:nth-child(5) { animation-delay: 0.5s; }
+.photos-grid .photo-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* Loading state for buttons */
+.upload-button:disabled {
+  position: relative;
+}
+
+.upload-button:disabled::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Enhanced dropzone states */
+.dropzone.drag-over {
+  border-color: #28a745;
+  background: #f0fff4;
+  transform: scale(1.02);
+}
+
+/* Responsive improvements */
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .upload-section {
+    padding: 15px;
+  }
+  
+  .dropzone {
+    padding: 40px 15px;
+  }
+  
+  .dropzone-text {
+    font-size: 1rem;
+  }
+  
+  .dropzone-subtext {
+    font-size: 0.8rem;
+  }
+}
