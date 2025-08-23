@@ -71,10 +71,13 @@ npm run dev
 
 ### Option 1: AWS EC2 (Recommended)
 
-```bash
-# Deploy to EC2
-./deploy-aws.sh
-```
+The application is currently deployed on AWS EC2 with:
+- **HTTPS**: Secure SSL certificate via Let's Encrypt
+- **Domain**: `3.16.108.174.nip.io` (free nip.io domain)
+- **SSL**: Trusted certificate with auto-renewal
+- **Security**: HSTS, security headers, and encryption
+
+**Live Application**: https://3.16.108.174.nip.io
 
 ### Option 2: Other Platforms
 
@@ -82,9 +85,17 @@ npm run dev
 - **Netlify**: Upload `client/build` folder
 - **Heroku**: `heroku create && git push heroku main`
 
-## 🔒 Security Features
+## 🚀 Current Deployment Status
 
-### What's Protected by .gitignore
+### ✅ Production Ready
+- **Live URL**: https://3.16.108.174.nip.io
+- **SSL Certificate**: Let's Encrypt (auto-renewing)
+- **Domain**: Free nip.io domain
+- **Security**: HTTPS with HSTS and security headers
+- **Hosting**: AWS EC2 with Nginx reverse proxy
+- **Process Management**: PM2 for Node.js applications
+
+### 🔒 Security Features
 
 - ✅ `.env` files (AWS credentials)
 - ✅ `*.pem` files (EC2 key pairs)
@@ -115,10 +126,9 @@ store2s3/
 │   ├── routes/            # API routes
 │   ├── middleware/        # Authentication
 │   └── index.js           # Main server
-├── deploy-aws.sh          # AWS deployment script
-├── user-data.sh           # EC2 setup script
 ├── .gitignore             # Git ignore rules
 ├── env.example            # Environment template
+├── package.json           # Project dependencies
 └── README.md              # This file
 ```
 
