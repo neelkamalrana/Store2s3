@@ -1,8 +1,16 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const { CognitoIdentityProviderClient, GetUserCommand } = require('@aws-sdk/client-cognito-identity-provider');
 
-// Middleware to verify JWT token
-const authenticateToken = async (req, res, next) => {
+// Initialize Cognito client
+const cognitoClient = new CognitoIdentityProviderClient({
+  region: process.env.AWS_COGNITO_REGION || process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  }
+});
+
+// Middleware to verify Cognito JWT token
+const authenticateCognitoToken = async (req, res, next) => {
   try {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
@@ -11,25 +19,31 @@ const authenticateToken = async (req, res, next) => {
       return res.status(401).json({ error: 'Access token required' });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.userId).select('-password');
-    
-    if (!user || !user.isActive) {
-      return res.status(401).json({ error: 'Invalid or inactive user' });
-    }
+    // Verify token with Cognito
+    const command = new GetUserCommand({
+      AccessToken: token
+    });
 
-    req.user = user;
+    const response = await cognitoClient.send(command);
+    
+    // Extract user info from Cognito response
+    req.user = {
+      username: response.Username,
+      email: response.UserAttributes.find(attr => attr.Name === 'email')?.Value,
+      sub: response.UserAttributes.find(attr => attr.Name === 'sub')?.Value,
+      cognitoUser: true
+    };
+
     next();
   } catch (error) {
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(401).json({ error: 'Invalid token' });
-    } else if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ error: 'Token expired' });
+    console.error('Cognito auth error:', error);
+    if (error.name === 'NotAuthorizedException') {
+      return res.status(401).json({ error: 'Invalid or expired token' });
     }
-    console.error('Auth middleware error:', error);
     return res.status(500).json({ error: 'Authentication failed' });
   }
 };
+
 
 // Middleware to check if user owns the resource
 const checkOwnership = (resourceModel) => {
@@ -64,7 +78,7 @@ const requireAdmin = (req, res, next) => {
 };
 
 module.exports = {
-  authenticateToken,
+  authenticateCognitoToken,
   checkOwnership,
   requireAdmin
 };

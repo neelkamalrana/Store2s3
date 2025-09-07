@@ -6,17 +6,18 @@ A modern web application for storing and managing photos using AWS S3, built wit
 
 - **📸 Photo Upload**: Drag & drop or click to upload photos
 - **☁️ S3 Storage**: Secure cloud storage with AWS S3
-- **🔐 User Authentication**: Optional user management with MongoDB
+- **🔐 User Authentication**: Secure authentication with AWS Cognito
+- **👤 User-Specific Photos**: Each user only sees their own photos
 - **📱 Responsive Design**: Works on all devices
 - **🚀 AWS Native**: Everything runs within AWS ecosystem
-- **💰 Cost-Effective**: S3-only mode for minimal costs
+- **💰 Cost-Effective**: Minimal AWS costs
 
 ## 🏗️ Architecture
 
 ```
 Frontend (React) → Backend (Node.js/Express) → AWS S3
                                     ↓
-                              MongoDB (Optional)
+                              AWS Cognito (Authentication)
 ```
 
 ## 🚀 Quick Start
@@ -24,7 +25,7 @@ Frontend (React) → Backend (Node.js/Express) → AWS S3
 ### Prerequisites
 
 - Node.js 18+ 
-- AWS Account with S3 bucket
+- AWS Account with S3 bucket and Cognito User Pool
 - Git
 
 ### 1. Clone the Repository
@@ -52,10 +53,16 @@ nano .env
 
 **Required Environment Variables:**
 ```env
+# AWS S3 Configuration
 AWS_ACCESS_KEY_ID=your_access_key
 AWS_SECRET_ACCESS_KEY=your_secret_key
-AWS_REGION=us-east-2
+AWS_REGION=us-east-1
 S3_BUCKET_NAME=your_bucket_name
+
+# AWS Cognito Configuration
+AWS_COGNITO_USER_POOL_ID=your_user_pool_id
+AWS_COGNITO_CLIENT_ID=your_app_client_id
+AWS_COGNITO_REGION=us-east-1
 ```
 
 ### 4. Start Development Servers
